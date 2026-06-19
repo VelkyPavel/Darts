@@ -41,7 +41,9 @@ export default defineConfig({
       },
     }),
   ],
+  base: '/darts/',   // ← přidej tento řádek
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
 });
+
