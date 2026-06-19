@@ -11,6 +11,7 @@ Designed to be fast, simple, and accessible with a responsive interface for desk
 
 ## Installation
 [Installation guide](PWA_INSTALLATION_GUIDE.md)
+(for the "node_modules" folder use "npm install" command to download everything)
 
 ## License
 MIT License
