@@ -1,7 +1,9 @@
-import { ArrowLeft } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowLeft, Download, Upload } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useSettings } from '../context/SettingsContext';
+import { exportBackup, importBackup } from '../utils/storage';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 
@@ -9,6 +11,47 @@ export default function Settings() {
   const { setScreen } = useGame();
   const { t } = useLanguage();
   const { autoConfirm, setAutoConfirm, endRoundConfirmation, setEndRoundConfirmation, doubleOut, setDoubleOut } = useSettings();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [backupMessage, setBackupMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleExport = () => {
+    const json = exportBackup();
+    const date = new Date().toISOString().slice(0, 10);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `darts-backup-${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setBackupMessage(null);
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        importBackup(String(reader.result));
+        setBackupMessage({ type: 'success', text: t('importSuccess') });
+        // Reload so every context re-reads from storage.
+        setTimeout(() => window.location.reload(), 800);
+      } catch {
+        setBackupMessage({ type: 'error', text: t('importError') });
+      }
+    };
+    reader.onerror = () => setBackupMessage({ type: 'error', text: t('importError') });
+    reader.readAsText(file);
+    // Reset so selecting the same file again still fires onChange.
+    e.target.value = '';
+  };
 
   return (
     <div className="px-4 py-6 max-w-lg mx-auto space-y-6">
@@ -123,6 +166,42 @@ export default function Settings() {
             {t('off')}
           </button>
         </div>
+      </div>
+
+      {/* Backup & restore */}
+      <div>
+        <h2 className="text-sm font-semibold text-[var(--text-secondary)] mb-2 uppercase tracking-wider">
+          {t('backup')}
+        </h2>
+        <p className="text-xs text-[var(--text-secondary)] mb-3 leading-relaxed">
+          {t('backupDescription')}
+        </p>
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <button
+            onClick={handleExport}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--accent)] text-white text-sm font-medium active:scale-95 transition-all min-h-[44px]"
+          >
+            <Download size={16} /> {t('exportData')}
+          </button>
+          <button
+            onClick={handleImportClick}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--card)] text-[var(--text)] text-sm font-medium border border-[var(--border)] hover:bg-[var(--hover)] active:scale-95 transition-all min-h-[44px]"
+          >
+            <Upload size={16} /> {t('importData')}
+          </button>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/json,.json"
+          onChange={handleImportFile}
+          className="hidden"
+        />
+        {backupMessage && (
+          <p className={`text-sm px-1 ${backupMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}`}>
+            {backupMessage.text}
+          </p>
+        )}
       </div>
     </div>
   );

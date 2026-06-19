@@ -11,14 +11,14 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  language: 'en',
+  language: 'cs',
   setLanguage: () => {},
   t: (key) => key,
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() =>
-    loadFromStorage(STORAGE_KEYS.LANGUAGE, 'en' as Language)
+    loadFromStorage(STORAGE_KEYS.LANGUAGE, 'cs' as Language)
   );
 
   const setLanguage = (l: Language) => {

@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useSettings } from '../context/SettingsContext';
 import PlayerCard from './PlayerCard';
 import ScoreInput from './ScoreInput';
+import TurnHistoryPanel from './TurnHistoryPanel';
 import { THROWS_PER_TURN } from '../utils/gameLogic';
 import Modal from './Modal';
 import { Undo2, AlertTriangle } from 'lucide-react';
@@ -19,7 +20,6 @@ export default function GameBoard() {
     currentThrow,
     currentThrows,
     currentThrowsIsDouble,
-    turnHistory,
     isBust,
     showEndRoundConfirm,
     pendingTurnTotal,
@@ -92,30 +92,33 @@ export default function GameBoard() {
     const remaining = currentPlayer ? currentPlayer.score - turnTotal : null;
     const lastThrowIsDouble = currentThrowsIsDouble[currentThrowsIsDouble.length - 1] || false;
 
-    // Check for mid-turn win conditions
+    if (remaining === null) return;
+
+    // Determine the outcome of the current throws.
+    // A BUST ends the turn immediately, even on the 1st or 2nd dart
+    // (e.g. 5 points left and the player scores 7 -> turn over).
+    let outcome: 'win' | 'bust' | 'end' | null = null;
     if (remaining === 0) {
-      // Single Out: any way to reach 0 = win
-      // Double Out: must reach 0 with a double = win
       if (!doubleOut || lastThrowIsDouble) {
-        if (endRoundConfirmation) {
-          confirmTurn();
-        } else {
-          confirmTurn();
-          setTimeout(() => confirmEndRound(doubleOut), 0);
-        }
-        return;
+        outcome = 'win';
+      } else {
+        outcome = 'bust'; // reached 0 without a double in double-out
       }
-      // Double Out: reached 0 without double = will bust at end of turn
+    } else if (remaining < 0) {
+      outcome = 'bust';
+    } else if (doubleOut && remaining === 1) {
+      outcome = 'bust'; // can't finish from 1 in double-out
+    } else if (currentThrows.length === THROWS_PER_TURN) {
+      outcome = 'end';
     }
 
-    // Normal flow: when 3rd throw is entered
-    if (currentThrows.length === THROWS_PER_TURN) {
-      if (endRoundConfirmation) {
-        confirmTurn();
-      } else {
-        confirmTurn();
-        setTimeout(() => confirmEndRound(doubleOut), 0);
-      }
+    if (!outcome) return;
+
+    if (endRoundConfirmation) {
+      confirmTurn();
+    } else {
+      confirmTurn();
+      setTimeout(() => confirmEndRound(doubleOut), 0);
     }
   }, [currentThrows.length, endRoundConfirmation, confirmTurn, confirmEndRound, doubleOut, currentPlayer, currentThrowsIsDouble]);
 
@@ -266,35 +269,10 @@ export default function GameBoard() {
         </div>
       </Modal>
 
-      {/* Turn history */}
-      {turnHistory.length > 0 && (
-        <div className="mt-4 flex-1 overflow-y-auto min-h-0 pb-4">
-          <h3 className="text-xs font-semibold text-[var(--text-secondary)] mb-1 uppercase tracking-wider">
-            History
-          </h3>
-          <div className="space-y-1">
-            {turnHistory.map((turn, i) => (
-              <div
-                key={i}
-                className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-xs gap-2 ${
-                  turn.wasBust
-                    ? 'bg-red-500/10 border border-red-500/20'
-                    : 'bg-[var(--card)] border border-[var(--border)]'
-                }`}
-              >
-                <span className="text-[var(--text)] truncate">
-                  R{turn.round} - {turn.playerName}
-                </span>
-                <span className="text-[var(--text-secondary)] shrink-0">
-                  {turn.throws.join(' ')} = {turn.total}
-                  {turn.wasBust ? ' BUST' : ''}
-                </span>
-                <span className="text-[var(--text-secondary)] opacity-60 shrink-0">{turn.timestamp}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Turn history (mobile: shown below the board; desktop: shown in the right aside via screens/Game.tsx) */}
+      <div className="md:hidden mt-4 flex-1 overflow-y-auto min-h-0 pb-4">
+        <TurnHistoryPanel />
+      </div>
     </div>
   );
 }

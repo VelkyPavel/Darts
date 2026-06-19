@@ -91,6 +91,19 @@ export interface Translations {
   back: string;
   save: string;
   close: string;
+  // Player validation
+  playerExists: string;
+  // History management
+  clearAll: string;
+  confirmDeleteGame: string;
+  confirmClearAll: string;
+  // Backup & restore
+  backup: string;
+  exportData: string;
+  importData: string;
+  importSuccess: string;
+  importError: string;
+  backupDescription: string;
 }
 
 const en: Translations = {
@@ -171,6 +184,19 @@ const en: Translations = {
   back: 'Back',
   save: 'Save',
   close: 'Close',
+  // Player validation
+  playerExists: 'A player with this name already exists.',
+  // History management
+  clearAll: 'Clear all',
+  confirmDeleteGame: 'Delete this game?',
+  confirmClearAll: 'Delete the entire game history? This cannot be undone.',
+  // Backup & restore
+  backup: 'Backup',
+  exportData: 'Export',
+  importData: 'Import',
+  importSuccess: 'Backup restored. Reloading…',
+  importError: 'Invalid backup file. Nothing was changed.',
+  backupDescription: 'Save all settings, players and history to a file, or restore them on this or another device.',
 };
 
 const cs: Translations = {
@@ -251,6 +277,19 @@ const cs: Translations = {
   back: 'Zpět',
   save: 'Uložit',
   close: 'Zavřít',
+  // Player validation
+  playerExists: 'Hráč s tímto jménem již existuje.',
+  // History management
+  clearAll: 'Smazat vše',
+  confirmDeleteGame: 'Smazat tuto hru?',
+  confirmClearAll: 'Smazat celou historii her? Tuto akci nelze vrátit zpět.',
+  // Backup & restore
+  backup: 'Záloha',
+  exportData: 'Exportovat',
+  importData: 'Importovat',
+  importSuccess: 'Záloha obnovena. Načítání…',
+  importError: 'Neplatný soubor zálohy. Nic nebylo změněno.',
+  backupDescription: 'Uložte všechna nastavení, hráče a historii do souboru, nebo je obnovte na tomto či jiném zařízení.',
 };
 
 const sk: Translations = {
@@ -331,6 +370,19 @@ const sk: Translations = {
   back: 'Späť',
   save: 'Uložiť',
   close: 'Zavrieť',
+  // Player validation
+  playerExists: 'Hráč s týmto menom už existuje.',
+  // History management
+  clearAll: 'Zmazať všetko',
+  confirmDeleteGame: 'Zmazať túto hru?',
+  confirmClearAll: 'Zmazať celú históriu hier? Túto akciu nemožno vrátiť späť.',
+  // Backup & restore
+  backup: 'Záloha',
+  exportData: 'Exportovať',
+  importData: 'Importovať',
+  importSuccess: 'Záloha obnovená. Načítava sa…',
+  importError: 'Neplatný súbor zálohy. Nič sa nezmenilo.',
+  backupDescription: 'Uložte všetky nastavenia, hráčov a históriu do súboru, alebo ich obnovte na tomto či inom zariadení.',
 };
 
 const ru: Translations = {
@@ -411,6 +463,19 @@ const ru: Translations = {
   back: 'Назад',
   save: 'Сохранить',
   close: 'Закрыть',
+  // Player validation
+  playerExists: 'Игрок с таким именем уже существует.',
+  // History management
+  clearAll: 'Очистить всё',
+  confirmDeleteGame: 'Удалить эту игру?',
+  confirmClearAll: 'Удалить всю историю игр? Это действие нельзя отменить.',
+  // Backup & restore
+  backup: 'Резервная копия',
+  exportData: 'Экспорт',
+  importData: 'Импорт',
+  importSuccess: 'Резервная копия восстановлена. Перезагрузка…',
+  importError: 'Неверный файл резервной копии. Ничего не изменено.',
+  backupDescription: 'Сохраните все настройки, игроков и историю в файл или восстановите их на этом или другом устройстве.',
 };
 
 const pl: Translations = {
@@ -491,6 +556,19 @@ const pl: Translations = {
   back: 'Wstecz',
   save: 'Zapisz',
   close: 'Zamknij',
+  // Player validation
+  playerExists: 'Gracz o tej nazwie już istnieje.',
+  // History management
+  clearAll: 'Wyczyść wszystko',
+  confirmDeleteGame: 'Usunąć tę grę?',
+  confirmClearAll: 'Usunąć całą historię gier? Tej operacji nie można cofnąć.',
+  // Backup & restore
+  backup: 'Kopia zapasowa',
+  exportData: 'Eksport',
+  importData: 'Import',
+  importSuccess: 'Kopia zapasowa przywrócona. Ponowne ładowanie…',
+  importError: 'Nieprawidłowy plik kopii zapasowej. Nic nie zostało zmienione.',
+  backupDescription: 'Zapisz wszystkie ustawienia, graczy i historię do pliku lub przywróć je na tym lub innym urządzeniu.',
 };
 
 export const translations: Record<Language, Translations> = { en, cs, sk, ru, pl };

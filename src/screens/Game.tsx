@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import { useGame } from '../context/GameContext';
 import { useLanguage } from '../context/LanguageContext';
 import GameBoard from '../components/GameBoard';
+import TurnHistoryPanel from '../components/TurnHistoryPanel';
 
 export default function Game() {
   const { setScreen } = useGame();
@@ -21,9 +22,14 @@ export default function Game() {
         <div className="w-8" />
       </div>
 
-      {/* Game board */}
-      <div className="flex-1 overflow-y-auto px-4 py-3">
-        <GameBoard />
+      {/* Body: main board + history aside (history is at the bottom on mobile via GameBoard) */}
+      <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 overflow-y-auto px-4 py-3 min-w-0">
+          <GameBoard />
+        </div>
+        <aside className="hidden md:flex md:w-80 shrink-0 flex-col border-l border-[var(--border)] bg-[var(--bg)] px-3 py-4 overflow-hidden">
+          <TurnHistoryPanel />
+        </aside>
       </div>
     </div>
   );

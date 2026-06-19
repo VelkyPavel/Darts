@@ -35,7 +35,7 @@ interface GameContextType {
   pendingTurnTotal: number;
   // Player profiles
   playerProfiles: PlayerProfile[];
-  addProfile: (name: string) => PlayerProfile;
+  addProfile: (name: string) => PlayerProfile | null;
   deleteProfile: (id: string) => void;
   updateProfileStats: (id: string, won: boolean) => void;
   // Game actions
@@ -50,6 +50,8 @@ interface GameContextType {
   // Completed games
   completedGames: CompletedGame[];
   loadCompletedGames: () => void;
+  deleteCompletedGame: (id: string) => void;
+  clearAllHistory: () => void;
 }
 
 const GameContext = createContext<GameContextType>({} as GameContextType);
@@ -76,15 +78,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
     loadFromStorage(STORAGE_KEYS.GAME_HISTORY, [])
   );
 
-  const addProfile = useCallback((name: string): PlayerProfile => {
-    const profile: PlayerProfile = { id: generateId(), name, gamesPlayed: 0, gamesWon: 0 };
+  const addProfile = useCallback((name: string): PlayerProfile | null => {
+    const trimmed = name.trim();
+    // Reject duplicate names (case-insensitive, trimmed)
+    const exists = playerProfiles.some(
+      (p) => p.name.trim().toLowerCase() === trimmed.toLowerCase()
+    );
+    if (exists) return null;
+    const profile: PlayerProfile = { id: generateId(), name: trimmed, gamesPlayed: 0, gamesWon: 0 };
     setPlayerProfiles((prev) => {
       const next = [...prev, profile];
       saveToStorage(STORAGE_KEYS.PLAYERS, next);
       return next;
     });
     return profile;
-  }, []);
+  }, [playerProfiles]);
 
   const deleteProfile = useCallback((id: string) => {
     setPlayerProfiles((prev) => {
@@ -114,6 +122,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const loadCompletedGames = useCallback(() => {
     setCompletedGames(loadFromStorage(STORAGE_KEYS.GAME_HISTORY, []));
+  }, []);
+
+  const deleteCompletedGame = useCallback((id: string) => {
+    setCompletedGames((prev) => {
+      const next = prev.filter((g) => g.id !== id);
+      saveToStorage(STORAGE_KEYS.GAME_HISTORY, next);
+      return next;
+    });
+  }, []);
+
+  const clearAllHistory = useCallback(() => {
+    setCompletedGames([]);
+    saveToStorage(STORAGE_KEYS.GAME_HISTORY, []);
   }, []);
 
   // Save a snapshot before each turn for undo support
@@ -263,9 +284,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const cancelEndRound = useCallback(() => {
     setSnapshots((prev) => prev.slice(0, -1));
     setShowEndRoundConfirm(false);
-    setCurrentThrows((prev) => prev.slice(0, -1));
+    // Revert to a re-enterable state for the last dart. A bust can be triggered
+    // by the 1st or 2nd dart (immediate-bust logic), so compute the throw index
+    // from the remaining throws instead of assuming the 3rd.
+    setCurrentThrows((prev) => {
+      const next = prev.slice(0, -1);
+      setCurrentThrow(Math.max(1, Math.min(THROWS_PER_TURN, next.length + 1)));
+      return next;
+    });
     setCurrentThrowsIsDouble((prev) => prev.slice(0, -1));
-    setCurrentThrow(3);
   }, []);
 
   const confirmEndRound = useCallback((doubleOut: boolean) => {
@@ -276,14 +303,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const undoTurn = useCallback(() => {
     if (snapshots.length === 0) return;
     const snap = snapshots[snapshots.length - 1];
+    // Restore pre-turn state (scores, player, round) from the snapshot...
     setPlayers((prev) =>
       prev.map((p, i) => ({ ...p, score: snap.scores[i] }))
     );
     setCurrentPlayerIndex(snap.currentPlayerIndex);
     setRound(snap.round);
-    setCurrentThrow(snap.currentThrow);
-    setCurrentThrows(snap.currentThrows);
-    setCurrentThrowsIsDouble(snap.currentThrowsIsDouble);
+    // ...but reset throw state so the player can re-enter the whole turn.
+    // Restoring snap.currentThrows/currentThrow would leave the turn "full"
+    // (keyboard hidden, no further undo possible) and lock up the game.
+    setCurrentThrow(1);
+    setCurrentThrows([]);
+    setCurrentThrowsIsDouble([]);
     setSnapshots((prev) => prev.slice(0, -1));
     setTurnHistory((prev) => prev.slice(0, -1));
     setIsBust(false);
@@ -338,6 +369,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
         resetGame,
         completedGames,
         loadCompletedGames,
+        deleteCompletedGame,
+        clearAllHistory,
       }}
     >
       {children}

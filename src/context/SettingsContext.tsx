@@ -13,7 +13,7 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType>({
   autoConfirm: true,
   setAutoConfirm: () => {},
-  endRoundConfirmation: true,
+  endRoundConfirmation: false,
   setEndRoundConfirmation: () => {},
   doubleOut: true,
   setDoubleOut: () => {},
@@ -24,7 +24,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     loadFromStorage(STORAGE_KEYS.AUTO_CONFIRM, true)
   );
   const [endRoundConfirmation, setEndRoundConfirmationState] = useState<boolean>(() =>
-    loadFromStorage(STORAGE_KEYS.END_ROUND_CONFIRM, true)
+    loadFromStorage(STORAGE_KEYS.END_ROUND_CONFIRM, false)
   );
   const [doubleOut, setDoubleOutState] = useState<boolean>(() =>
     loadFromStorage(STORAGE_KEYS.DOUBLE_OUT, true)

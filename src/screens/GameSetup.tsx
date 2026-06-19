@@ -15,13 +15,19 @@ export default function GameSetup() {
   const [selectedPlayers, setSelectedPlayers] = useState<SelectedPlayer[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [showNewPlayer, setShowNewPlayer] = useState(false);
+  const [addError, setAddError] = useState(false);
 
   const handleAddProfile = () => {
     if (!newPlayerName.trim()) return;
     const profile = addProfile(newPlayerName.trim());
+    if (!profile) {
+      setAddError(true);
+      return;
+    }
     setSelectedPlayers((prev) => [...prev, { id: profile.id, name: profile.name }]);
     setNewPlayerName('');
     setShowNewPlayer(false);
+    setAddError(false);
   };
 
   const togglePlayer = (id: string, name: string) => {
@@ -98,23 +104,33 @@ export default function GameSetup() {
 
         {/* Add new player */}
         {showNewPlayer ? (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={newPlayerName}
-              onChange={(e) => setNewPlayerName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddProfile()}
-              placeholder={t('playerName')}
-              className="flex-1 px-4 py-3 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--text)] outline-none focus:ring-2 focus:ring-[var(--accent)]"
-              autoFocus
-            />
-            <button
-              onClick={handleAddProfile}
-              disabled={!newPlayerName.trim()}
-              className="px-4 py-3 rounded-xl bg-[var(--accent)] text-white font-bold disabled:opacity-40 active:scale-95 transition-all"
-            >
-              {t('add')}
-            </button>
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newPlayerName}
+                onChange={(e) => {
+                  setNewPlayerName(e.target.value);
+                  setAddError(false);
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddProfile()}
+                placeholder={t('playerName')}
+                className={`flex-1 px-4 py-3 rounded-xl bg-[var(--card)] border text-[var(--text)] outline-none focus:ring-2 focus:ring-[var(--accent)] ${
+                  addError ? 'border-red-500' : 'border-[var(--border)]'
+                }`}
+                autoFocus
+              />
+              <button
+                onClick={handleAddProfile}
+                disabled={!newPlayerName.trim()}
+                className="px-4 py-3 rounded-xl bg-[var(--accent)] text-white font-bold disabled:opacity-40 active:scale-95 transition-all"
+              >
+                {t('add')}
+              </button>
+            </div>
+            {addError && (
+              <p className="text-sm text-red-500 px-1">{t('playerExists')}</p>
+            )}
           </div>
         ) : (
           <button

@@ -10,12 +10,18 @@ export default function Players() {
   const [newName, setNewName] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [addError, setAddError] = useState(false);
 
   const handleAdd = () => {
     if (!newName.trim()) return;
-    addProfile(newName.trim());
+    const profile = addProfile(newName.trim());
+    if (!profile) {
+      setAddError(true);
+      return;
+    }
     setNewName('');
     setShowAdd(false);
+    setAddError(false);
   };
 
   const handleDelete = () => {
@@ -47,23 +53,33 @@ export default function Players() {
 
       {/* Add player form */}
       {showAdd && (
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-            placeholder={t('playerName')}
-            className="flex-1 px-4 py-3 rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--text)] outline-none focus:ring-2 focus:ring-[var(--accent)]"
-            autoFocus
-          />
-          <button
-            onClick={handleAdd}
-            disabled={!newName.trim()}
-            className="px-4 py-3 rounded-xl bg-[var(--accent)] text-white font-bold disabled:opacity-40 active:scale-95 transition-all"
-          >
-            {t('add')}
-          </button>
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => {
+                setNewName(e.target.value);
+                setAddError(false);
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+              placeholder={t('playerName')}
+              className={`flex-1 px-4 py-3 rounded-xl bg-[var(--card)] border text-[var(--text)] outline-none focus:ring-2 focus:ring-[var(--accent)] ${
+                addError ? 'border-red-500' : 'border-[var(--border)]'
+              }`}
+              autoFocus
+            />
+            <button
+              onClick={handleAdd}
+              disabled={!newName.trim()}
+              className="px-4 py-3 rounded-xl bg-[var(--accent)] text-white font-bold disabled:opacity-40 active:scale-95 transition-all"
+            >
+              {t('add')}
+            </button>
+          </div>
+          {addError && (
+            <p className="text-sm text-red-500 px-1">{t('playerExists')}</p>
+          )}
         </div>
       )}
 
