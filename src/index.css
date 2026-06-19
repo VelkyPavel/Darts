@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   THEME SYSTEM - CSS Variables
+   ============================================ */
+
+/* 1. Liquid Glass Light */
+.theme-liquidGlassLight {
+  --bg: #f0f4f8;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --card: rgba(255, 255, 255, 0.55);
+  --card-active: rgba(255, 255, 255, 0.75);
+  --border: rgba(255, 255, 255, 0.5);
+  --hover: rgba(255, 255, 255, 0.65);
+  --accent: #0891b2;
+  --accent-dark: #0e7490;
+  --header: rgba(240, 244, 248, 0.8);
+  --nav: rgba(240, 244, 248, 0.85);
+  --key-bg: rgba(255, 255, 255, 0.7);
+  --key-text: #334155;
+  --key-active: rgba(8, 145, 178, 0.15);
+  --glass-blur: 20px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 2. Liquid Glass Dark */
+.theme-liquidGlassDark {
+  --bg: #0c1222;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --card: rgba(30, 41, 59, 0.55);
+  --card-active: rgba(30, 41, 59, 0.8);
+  --border: rgba(148, 163, 184, 0.15);
+  --hover: rgba(51, 65, 85, 0.5);
+  --accent: #06b6d4;
+  --accent-dark: #0891b2;
+  --header: rgba(12, 18, 34, 0.8);
+  --nav: rgba(12, 18, 34, 0.85);
+  --key-bg: rgba(30, 41, 59, 0.65);
+  --key-text: #cbd5e1;
+  --key-active: rgba(6, 182, 212, 0.15);
+  --glass-blur: 20px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* 3. Normal Light */
+.theme-normalLight {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --text-secondary: #64748b;
+  --card: #ffffff;
+  --card-active: #f1f5f9;
+  --border: #e2e8f0;
+  --hover: #f1f5f9;
+  --accent: #0891b2;
+  --accent-dark: #0e7490;
+  --header: #ffffff;
+  --nav: #ffffff;
+  --key-bg: #f1f5f9;
+  --key-text: #334155;
+  --key-active: #e2e8f0;
+  --glass-blur: 0px;
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --glass-border: 1px solid #e2e8f0;
+}
+
+/* 4. Normal Dark */
+.theme-normalDark {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --card: #1e293b;
+  --card-active: #334155;
+  --border: #334155;
+  --hover: #334155;
+  --accent: #06b6d4;
+  --accent-dark: #0891b2;
+  --header: #1e293b;
+  --nav: #1e293b;
+  --key-bg: #334155;
+  --key-text: #cbd5e1;
+  --key-active: #475569;
+  --glass-blur: 0px;
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --glass-border: 1px solid #334155;
+}
+
+/* ============================================
+   GLASS EFFECTS - Liquid Glass themes
+   ============================================ */
+
+.theme-liquidGlassLight [class*="rounded-"],
+.theme-liquidGlassDark [class*="rounded-"] {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+}
+
+/* Glow accents for Liquid Glass Dark */
+.theme-liquidGlassDark .bg-\[var\(--accent\)\] {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent theme flash by setting default theme class */
+html {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  margin: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes bust-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  30% { transform: scale(1.4); opacity: 1; }
+  50% { transform: scale(0.9); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bust-bg {
+  0% { background-color: transparent; }
+  30% { background-color: rgba(239, 68, 68, 0.15); }
+  100% { background-color: transparent; }
+}
+
+@keyframes modal-in {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes score-update {
+  0% { opacity: 0.5; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-bust-pop {
+  animation: bust-pop 0.6s ease-out forwards;
+}
+
+.animate-bust-bg {
+  animation: bust-bg 1.5s ease-out;
+}
+
+.animate-modal-in {
+  animation: modal-in 0.2s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+.animate-score-update {
+  animation: score-update 0.3s ease-out;
+}
+
+/* ============================================
+   SAFE AREA - iOS notch support
+   ============================================ */
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* ============================================
+   BUTTON BASE
+   ============================================ */
+
+button {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
