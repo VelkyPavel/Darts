@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useSettings } from '../context/SettingsContext';
 import PlayerCard from './PlayerCard';
 import ScoreInput from './ScoreInput';
+import SpeechInput from './SpeechInput';
 import TurnHistoryPanel from './TurnHistoryPanel';
 import { THROWS_PER_TURN } from '../utils/gameLogic';
 import Modal from './Modal';
@@ -12,7 +13,7 @@ import { Undo2, AlertTriangle } from 'lucide-react';
 export default function GameBoard() {
   const game = useGame();
   const { t } = useLanguage();
-  const { endRoundConfirmation, doubleOut } = useSettings();
+  const { endRoundConfirmation, doubleOut, speechToText } = useSettings();
   const {
     players,
     currentPlayerIndex,
@@ -204,7 +205,10 @@ export default function GameBoard() {
 
       {/* Score input (only when throws remaining) */}
       {!allThrowsEntered && !showEndRoundConfirm && (
-        <ScoreInput onScore={handleScore} />
+        <>
+          <ScoreInput onScore={handleScore} />
+          {speechToText && <SpeechInput onScore={handleScore} />}
+        </>
       )}
 
       {/* Action buttons row */}

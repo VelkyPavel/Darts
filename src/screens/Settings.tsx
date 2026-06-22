@@ -10,7 +10,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 export default function Settings() {
   const { setScreen } = useGame();
   const { t } = useLanguage();
-  const { autoConfirm, setAutoConfirm, endRoundConfirmation, setEndRoundConfirmation, doubleOut, setDoubleOut } = useSettings();
+  const { autoConfirm, setAutoConfirm, endRoundConfirmation, setEndRoundConfirmation, doubleOut, setDoubleOut, speechToText, setSpeechToText } = useSettings();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [backupMessage, setBackupMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -166,6 +166,39 @@ export default function Settings() {
             {t('off')}
           </button>
         </div>
+      </div>
+
+      {/* Voice input (Beta) */}
+      <div>
+        <h2 className="text-sm font-semibold text-[var(--text-secondary)] mb-2 uppercase tracking-wider flex items-center gap-2">
+          {t('speechToText')}
+          <span className="text-[10px] normal-case tracking-normal rounded bg-[var(--hover)] text-[var(--text-secondary)] px-1.5 py-0.5">Beta</span>
+        </h2>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => setSpeechToText(true)}
+            className={`px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              speechToText
+                ? 'bg-[var(--accent)] text-white shadow-md'
+                : 'bg-[var(--card)] text-[var(--text)] border border-[var(--border)] hover:bg-[var(--hover)]'
+            }`}
+          >
+            {t('on')}
+          </button>
+          <button
+            onClick={() => setSpeechToText(false)}
+            className={`px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              !speechToText
+                ? 'bg-[var(--accent)] text-white shadow-md'
+                : 'bg-[var(--card)] text-[var(--text)] border border-[var(--border)] hover:bg-[var(--hover)]'
+            }`}
+          >
+            {t('off')}
+          </button>
+        </div>
+        <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed">
+          {t('speechToTextDescription')}
+        </p>
       </div>
 
       {/* Backup & restore */}

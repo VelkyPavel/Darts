@@ -8,6 +8,8 @@ interface SettingsContextType {
   setEndRoundConfirmation: (v: boolean) => void;
   doubleOut: boolean;
   setDoubleOut: (v: boolean) => void;
+  speechToText: boolean;
+  setSpeechToText: (v: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType>({
@@ -17,6 +19,8 @@ const SettingsContext = createContext<SettingsContextType>({
   setEndRoundConfirmation: () => {},
   doubleOut: true,
   setDoubleOut: () => {},
+  speechToText: false,
+  setSpeechToText: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -28,6 +32,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   );
   const [doubleOut, setDoubleOutState] = useState<boolean>(() =>
     loadFromStorage(STORAGE_KEYS.DOUBLE_OUT, true)
+  );
+  const [speechToText, setSpeechToTextState] = useState<boolean>(() =>
+    loadFromStorage(STORAGE_KEYS.SPEECH_TO_TEXT, false)
   );
 
   const setAutoConfirm = (v: boolean) => {
@@ -45,9 +52,23 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     saveToStorage(STORAGE_KEYS.DOUBLE_OUT, v);
   };
 
+  const setSpeechToText = (v: boolean) => {
+    setSpeechToTextState(v);
+    saveToStorage(STORAGE_KEYS.SPEECH_TO_TEXT, v);
+  };
+
   return (
     <SettingsContext.Provider
-      value={{ autoConfirm, setAutoConfirm, endRoundConfirmation, setEndRoundConfirmation, doubleOut, setDoubleOut }}
+      value={{
+        autoConfirm,
+        setAutoConfirm,
+        endRoundConfirmation,
+        setEndRoundConfirmation,
+        doubleOut,
+        setDoubleOut,
+        speechToText,
+        setSpeechToText,
+      }}
     >
       {children}
     </SettingsContext.Provider>

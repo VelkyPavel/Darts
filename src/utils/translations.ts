@@ -104,6 +104,13 @@ export interface Translations {
   importSuccess: string;
   importError: string;
   backupDescription: string;
+  // Speech to text (beta)
+  speechToText: string;
+  listening: string;
+  speechNotUnderstood: string;
+  micDenied: string;
+  speechUnsupported: string;
+  speechToTextDescription: string;
 }
 
 const en: Translations = {
@@ -197,6 +204,13 @@ const en: Translations = {
   importSuccess: 'Backup restored. Reloading…',
   importError: 'Invalid backup file. Nothing was changed.',
   backupDescription: 'Save all settings, players and history to a file, or restore them on this or another device.',
+  // Speech to text (beta)
+  speechToText: 'Voice input',
+  listening: 'Listening…',
+  speechNotUnderstood: "Didn't catch that",
+  micDenied: 'Microphone access denied',
+  speechUnsupported: 'Voice input is not supported in this browser',
+  speechToTextDescription: 'Experimental — in very early stages and may contain bugs. Works only in Chrome and Chromium-based browsers (e.g. Edge, Brave). Not supported in Safari or Firefox.',
 };
 
 const cs: Translations = {
@@ -290,6 +304,13 @@ const cs: Translations = {
   importSuccess: 'Záloha obnovena. Načítání…',
   importError: 'Neplatný soubor zálohy. Nic nebylo změněno.',
   backupDescription: 'Uložte všechna nastavení, hráče a historii do souboru, nebo je obnovte na tomto či jiném zařízení.',
+  // Speech to text (beta)
+  speechToText: 'Hlasový vstup',
+  listening: 'Poslouchám…',
+  speechNotUnderstood: 'Nerozeznal jsem hod',
+  micDenied: 'Přístup k mikrofonu byl zamítnut',
+  speechUnsupported: 'Hlasový vstup není v tomto prohlížeči podporován',
+  speechToTextDescription: 'Experimentální — ve velmi raném stadiu a může obsahovat chyby. Funguje pouze v prohlížeči Chrome a prohlížečích na bázi Chromia (např. Edge, Brave). Není podporováno v Safari nebo Firefoxu.',
 };
 
 const sk: Translations = {
@@ -383,6 +404,13 @@ const sk: Translations = {
   importSuccess: 'Záloha obnovená. Načítava sa…',
   importError: 'Neplatný súbor zálohy. Nič sa nezmenilo.',
   backupDescription: 'Uložte všetky nastavenia, hráčov a históriu do súboru, alebo ich obnovte na tomto či inom zariadení.',
+  // Speech to text (beta)
+  speechToText: 'Hlasový vstup',
+  listening: 'Počúvam…',
+  speechNotUnderstood: 'Nerozoznal som hod',
+  micDenied: 'Prístup k mikrofónu bol zamietnutý',
+  speechUnsupported: 'Hlasový vstup nie je v tomto prehliadači podporovaný',
+  speechToTextDescription: 'Experimentálna funkcia — vo veľmi ranom štádiu a môže obsahovať chyby. Funguje iba v prehliadači Chrome a prehliadačoch na báze Chromia (napr. Edge, Brave). Nie je podporované v Safari alebo Firefox.',
 };
 
 const ru: Translations = {
@@ -476,6 +504,13 @@ const ru: Translations = {
   importSuccess: 'Резервная копия восстановлена. Перезагрузка…',
   importError: 'Неверный файл резервной копии. Ничего не изменено.',
   backupDescription: 'Сохраните все настройки, игроков и историю в файл или восстановите их на этом или другом устройстве.',
+  // Speech to text (beta)
+  speechToText: 'Голосовой ввод',
+  listening: 'Слушаю…',
+  speechNotUnderstood: 'Не расслышал',
+  micDenied: 'Доступ к микрофону запрещён',
+  speechUnsupported: 'Голосовой ввод не поддерживается в этом браузере',
+  speechToTextDescription: 'Экспериментальная функция — на очень ранней стадии, может содержать ошибки. Работает только в Chrome и браузерах на базе Chromium (например Edge, Brave). Не поддерживается в Safari или Firefox.',
 };
 
 const pl: Translations = {
@@ -569,6 +604,13 @@ const pl: Translations = {
   importSuccess: 'Kopia zapasowa przywrócona. Ponowne ładowanie…',
   importError: 'Nieprawidłowy plik kopii zapasowej. Nic nie zostało zmienione.',
   backupDescription: 'Zapisz wszystkie ustawienia, graczy i historię do pliku lub przywróć je na tym lub innym urządzeniu.',
+  // Speech to text (beta)
+  speechToText: 'Wprowadzenie głosowe',
+  listening: 'Słucham…',
+  speechNotUnderstood: 'Nie zrozumiałem',
+  micDenied: 'Odmówiono dostępu do mikrofonu',
+  speechUnsupported: 'Wprowadzenie głosowe nie jest obsługiwane w tej przeglądarce',
+  speechToTextDescription: 'Funkcja eksperymentalna — na bardzo wczesnym etapie i może zawierać błędy. Działa tylko w Chrome i przeglądarkach opartych na Chromium (np. Edge, Brave). Nie jest obsługiwana w Safari ani Firefox.',
 };
 
 export const translations: Record<Language, Translations> = { en, cs, sk, ru, pl };

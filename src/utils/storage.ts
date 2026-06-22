@@ -33,6 +33,7 @@ export const STORAGE_KEYS = {
   AUTO_CONFIRM: 'darts_auto_confirm',
   END_ROUND_CONFIRM: 'darts_end_round_confirm',
   DOUBLE_OUT: 'darts_double_out',
+  SPEECH_TO_TEXT: 'darts_speech_to_text',
   PLAYERS: 'darts_players',
   GAME_HISTORY: 'darts_game_history',
 } as const;
